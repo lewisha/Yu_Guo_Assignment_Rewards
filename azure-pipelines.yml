@@ -18,14 +18,8 @@ steps:
       args = parser.parse_args()
       print ('Hello ', args.world)
     arguments: --world Venus
-
-- script: python -m pip install --upgrade pip setuptools wheel
-  displayName: 'Install tools'
-
-- script: pip install -r requirements.txt
-  displayName: 'Install requirements'
-
-- script: |
-    python -m pip install flake8
-    flake8 .
-  displayName: 'Run lint tests'
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+    testRunTitle: 'Publish test results for Python $(python.version)'
